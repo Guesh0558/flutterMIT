@@ -10,14 +10,30 @@ void main() {
   runApp(const FlutterView());
 }
 
+/// Root widget. Configures Material 3 theming with light/dark mode support.
 class FlutterView extends StatelessWidget {
   const FlutterView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter View',
-      theme: ThemeData(primarySwatch: Colors.grey),
+      title: 'My Flutter App',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF0553B1),
+          brightness: Brightness.light,
+        ),
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF0553B1),
+          brightness: Brightness.dark,
+        ),
+      ),
+      themeMode: ThemeMode.system,
       home: const MyHomePage(),
     );
   }
@@ -47,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
     platform.setMessageHandler(_handlePlatformIncrement);
   }
 
+  /// Called when the native side sends a message on [_channel].
   Future<String> _handlePlatformIncrement(String? message) async {
     setState(() {
       _counter++;
@@ -54,38 +71,94 @@ class _MyHomePageState extends State<MyHomePage> {
     return _emptyMessage;
   }
 
+  /// Sends a ping to the native side.
   void _sendFlutterIncrement() {
     platform.send(_pong); // ignore: unawaited_futures
   }
 
+  /// Resets the Flutter-side counter to zero.
+  void _resetCounter() {
+    setState(() {
+      _counter = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Center(
-              child: Text(
-                'Platform button tapped $_counter time${_counter == 1 ? '' : 's'}.',
-                style: const TextStyle(fontSize: 17.0),
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(bottom: 15.0, left: 5.0),
-            child: Row(
-              children: <Widget>[
-                Image.asset('assets/flutter-mark-square-64.png', scale: 1.5),
-                const Text('Flutter', style: TextStyle(fontSize: 30.0)),
-              ],
-            ),
+      backgroundColor: scheme.surface,
+      appBar: AppBar(
+        title: const Text('Flutter View'),
+        backgroundColor: scheme.primaryContainer,
+        foregroundColor: scheme.onPrimaryContainer,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Reset counter',
+            onPressed: _resetCounter,
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (child, animation) =>
+                          ScaleTransition(scale: animation, child: child),
+                      child: Text(
+                        '$_counter',
+                        key: ValueKey<int>(_counter),
+                        style: TextStyle(
+                          fontSize: 80,
+                          fontWeight: FontWeight.bold,
+                          color: scheme.primary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Platform button tapped $_counter time${_counter == 1 ? '' : 's'}.',
+                      style: TextStyle(fontSize: 16, color: scheme.onSurfaceVariant),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+              color: scheme.surfaceContainerLow,
+              child: Row(
+                children: <Widget>[
+                  Image.asset('assets/flutter-mark-square-64.png', scale: 1.5),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Flutter',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                      color: scheme.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: _sendFlutterIncrement,
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.touch_app),
+        label: const Text('Ping Native'),
       ),
     );
   }
