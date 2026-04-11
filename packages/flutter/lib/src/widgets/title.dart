@@ -52,7 +52,10 @@ class _TitleState extends State<Title> {
 
   void _updateChrome() {
     SystemChrome.setApplicationSwitcherDescription(
-      ApplicationSwitcherDescription(label: widget.title, primaryColor: widget.color.value),
+      ApplicationSwitcherDescription(
+        label: widget.title,
+        primaryColor: widget.color.toARGB32(), // ✅ replaces deprecated .value
+      ),
     );
   }
 
