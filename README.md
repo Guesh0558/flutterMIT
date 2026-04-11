@@ -1,11 +1,10 @@
-<a href="https://flutter.dev/">
-  <h1 align="center">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://storage.googleapis.com/cms-storage-bucket/6e19fee6b47b36ca613f.png">
-      <img alt="Flutter" src="https://storage.googleapis.com/cms-storage-bucket/c823e53b3a1a7b0d36a9.png">
-    </picture>
-  </h1>
-</a>
+# My Flutter Project
+
+<p align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/Mekelle_Institute_of_Technology.png/250px-Mekelle_Institute_of_Technology.png" alt="MIT Logo" width="200">
+</p>
+
+<h1 align="center">Mekelle Institute of Technology</h1>
 
 [![Flutter CI Status](https://flutter-dashboard.appspot.com/api/public/build-status-badge?repo=flutter)](https://flutter-dashboard.appspot.com/#/build?repo=flutter)
 [![Discord badge][]][Discord instructions]
@@ -23,10 +22,10 @@ open source.
 
 ## Documentation
 
-* [Install Flutter](https://docs.flutter.dev/get-started)
-* [Flutter documentation](https://docs.flutter.dev)
-* [Development wiki](./docs/README.md)
-* [Contributing to Flutter](https://github.com/flutter/flutter/blob/main/CONTRIBUTING.md)
+- [Install Flutter](https://docs.flutter.dev/get-started)
+- [Flutter documentation](https://docs.flutter.dev)
+- [Development wiki](./docs/README.md)
+- [Contributing to Flutter](https://github.com/flutter/flutter/blob/main/CONTRIBUTING.md)
 
 For release and other announcements, join the
 [flutter-announce](https://groups.google.com/g/flutter-announce)
