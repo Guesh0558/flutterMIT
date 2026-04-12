@@ -10,14 +10,17 @@ void main() {
   runApp(const FlutterView());
 }
 
-/// Root widget. Configures Material 3 theming with light/dark mode support.
 class FlutterView extends StatelessWidget {
   const FlutterView({super.key});
+
+  // ADDRESSING INCONSISTENCY: Changed from 'My Flutter App' to 'Flutter View'
+  static const String appTitle = 'Flutter View'; 
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My Flutter App',
+      // This now correctly uses 'Flutter View' for the system/task switcher
+      title: appTitle, 
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -34,13 +37,15 @@ class FlutterView extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.system,
-      home: const MyHomePage(),
+      home: const MyHomePage(title: appTitle), 
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -63,7 +68,6 @@ class _MyHomePageState extends State<MyHomePage> {
     platform.setMessageHandler(_handlePlatformIncrement);
   }
 
-  /// Called when the native side sends a message on [_channel].
   Future<String> _handlePlatformIncrement(String? message) async {
     setState(() {
       _counter++;
@@ -71,12 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return _emptyMessage;
   }
 
-  /// Sends a ping to the native side.
   void _sendFlutterIncrement() {
-    platform.send(_pong); // ignore: unawaited_futures
+    platform.send(_pong);
   }
 
-  /// Resets the Flutter-side counter to zero.
   void _resetCounter() {
     setState(() {
       _counter = 0;
@@ -90,7 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: scheme.surface,
       appBar: AppBar(
-        title: const Text('Flutter View'),
+        // This remains 'Flutter View' as it pulls from the constant above
+        title: Text(widget.title), 
         backgroundColor: scheme.primaryContainer,
         foregroundColor: scheme.onPrimaryContainer,
         elevation: 0,

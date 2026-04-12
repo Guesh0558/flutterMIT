@@ -54,7 +54,8 @@ class _TitleState extends State<Title> {
     SystemChrome.setApplicationSwitcherDescription(
       ApplicationSwitcherDescription(
         label: widget.title,
-        primaryColor: widget.color.toARGB32(), // ✅ replaces deprecated .value
+        // FIXED: Removed the inline comment and emoji to align with Flutter style guide
+        primaryColor: widget.color.toARGB32(),
       ),
     );
   }
