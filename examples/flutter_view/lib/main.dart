@@ -14,13 +14,13 @@ class FlutterView extends StatelessWidget {
   const FlutterView({super.key});
 
   // ADDRESSING INCONSISTENCY: Changed from 'My Flutter App' to 'Flutter View'
-  static const String appTitle = 'Flutter View'; 
+  static const String appTitle = 'Flutter View';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       // This now correctly uses 'Flutter View' for the system/task switcher
-      title: appTitle, 
+      title: appTitle,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -37,7 +37,7 @@ class FlutterView extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.system,
-      home: const MyHomePage(title: appTitle), 
+      home: const MyHomePage(title: appTitle),
     );
   }
 }
@@ -93,10 +93,10 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: scheme.surface,
       appBar: AppBar(
         // This remains 'Flutter View' as it pulls from the constant above
-        title: Text(widget.title), 
-        backgroundColor: scheme.primaryContainer,
-        foregroundColor: scheme.onPrimaryContainer,
-        elevation: 0,
+        title: Text(widget.title),
+        //backgroundColor: scheme.primaryContainer,
+        //foregroundColor: scheme.onPrimaryContainer,
+        //elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
