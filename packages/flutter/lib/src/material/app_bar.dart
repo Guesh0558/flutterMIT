@@ -207,7 +207,7 @@ class AppBar extends StatefulWidget implements PreferredSizeWidget {
     this.shadowColor,
     this.surfaceTintColor,
     this.shape,
-    this.backgroundColor,
+    this.backgroundColor = const Color(0xFF673AB7),
     this.foregroundColor,
     this.iconTheme,
     this.actionsIconTheme,
