@@ -3234,7 +3234,7 @@ class ScaffoldState extends State<Scaffold>
       geometryNotifier: _geometryNotifier,
       child: ScrollNotificationObserver(
         child: Material(
-          color: widget.backgroundColor ?? themeData.scaffoldBackgroundColor,
+          color: widget.backgroundColor ?? Colors.lightGreen[200],
           child: Builder(
             builder: (BuildContext context) {
               return Actions(

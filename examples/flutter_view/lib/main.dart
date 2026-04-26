@@ -55,10 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
   static const String _channel = 'increment';
   static const String _pong = 'pong';
   static const String _emptyMessage = '';
-  static const BasicMessageChannel<String?> platform = BasicMessageChannel<String?>(
-    _channel,
-    StringCodec(),
-  );
+  static const BasicMessageChannel<String?> platform =
+      BasicMessageChannel<String?>(_channel, StringCodec());
 
   int _counter = 0;
 
@@ -90,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: scheme.surface,
+      //backgroundColor: scheme.surface,
       appBar: AppBar(
         // This remains 'Flutter View' as it pulls from the constant above
         title: Text(widget.title),
@@ -131,7 +129,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     const SizedBox(height: 8),
                     Text(
                       'Platform button tapped $_counter time${_counter == 1 ? '' : 's'}.',
-                      style: TextStyle(fontSize: 16, color: scheme.onSurfaceVariant),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: scheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
