@@ -849,7 +849,7 @@ abstract final class Colors {
     500: Color(_indigoPrimaryValue),
     600: Color(0xFF3949AB),
     700: Color(0xFF303F9F),
-    800: Color(0xFF283593),
+    800: Color(0xFF283593), 
     900: Color(0xFF1A237E),
   });
   static const int _indigoPrimaryValue = 0xFF3F51B5;
