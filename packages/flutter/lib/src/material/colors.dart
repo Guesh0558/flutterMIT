@@ -931,7 +931,7 @@ abstract final class Colors {
     800: Color(0xFF1565C0),
     900: Color(0xFF0D47A1),
   });
-  static const int _bluePrimaryValue = 0xFF2196F3;
+  static const int _bluePrimaryValue = 0xFF1E63FF;
 
   /// The blue accent color and swatch.
   ///
@@ -1244,7 +1244,7 @@ abstract final class Colors {
     800: Color(0xFF2E7D32),
     900: Color(0xFF1B5E20),
   });
-  static const int _greenPrimaryValue = 0xFF4CAF50;
+  static const int _greenPrimaryValue = 0xFF12B76A;
 
   /// The green accent color and swatch.
   ///
