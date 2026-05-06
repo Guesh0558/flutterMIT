@@ -1,5 +1,47 @@
-include: ../analysis_options.yaml
+# Analysis options for flutterMIT fork
+# This configuration is customized for experimental framework development
+# and relaxed linting during active modification.
+
+include: package:lints/recommended.yaml
 
 analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
   exclude:
-    - "test_fixes/**"
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/generated/**"
+    - "build/**"
+
+  errors:
+    unused_import: warning
+    dead_code: warning
+    avoid_print: ignore
+
+linter:
+  rules:
+    # Core safety rules
+    avoid_empty_else: true
+    avoid_unnecessary_containers: true
+    avoid_returning_null_for_void: true
+    cancel_subscriptions: true
+
+    # Code quality
+    prefer_final_fields: true
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    unnecessary_this: true
+    unnecessary_const: true
+
+    # Debugging allowance for fork development
+    avoid_print: false
+
+    # Style consistency
+    lines_longer_than_80_chars: false
+
+    # Experimental flexibility (flutterMIT fork)
+    always_declare_return_types: false
+    omit_local_variable_types: false
