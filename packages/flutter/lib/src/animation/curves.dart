@@ -322,40 +322,6 @@ class Threshold extends Curve {
 ///  * [Curves.fastOutSlowIn]
 ///  * [Curves.slowMiddle]
 ///
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_fast_linear_to_slow_ease_in.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_to_linear.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_sine.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_quad.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_cubic.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_quart.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_quint.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_expo.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_circ.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_back.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_linear_to_ease_out.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_sine.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_quad.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_cubic.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_quart.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_quint.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_expo.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_circ.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_back.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_sine.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_quad.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_cubic.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_quart.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_quint.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_expo.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_circ.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_back.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_fast_out_slow_in.mp4}
-/// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_slow_middle.mp4}
-///
 /// The [Cubic] class implements third-order Bézier curves.
 ///
 /// See also:
@@ -514,6 +480,233 @@ class ThreePointCubic extends Curve {
     return '${objectRuntimeType(this, 'ThreePointCubic($a1, $b1, $midpoint, $a2, $b2)')} ';
   }
 }
+
+// ============================================================
+// CUSTOM ADDITIONS
+// ============================================================
+
+/// A curve that advances in discrete equal-sized steps.
+///
+/// Instead of animating smoothly, [StepCurve] jumps instantly from one value
+/// to the next at evenly spaced intervals. This is useful for frame-by-frame
+/// sprite animations or any effect that should progress in hard increments
+/// rather than continuous motion.
+///
+/// The [steps] parameter controls how many discrete levels the output is
+/// divided into. For example, [StepCurve(4)] produces four jumps at t = 0.25,
+/// 0.50, 0.75, and 1.0, with output values of 0.25, 0.50, 0.75, and 1.0
+/// respectively.
+///
+/// Example usage:
+/// ```dart
+/// CurvedAnimation(
+///   parent: controller,
+///   curve: StepCurve(5),
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [Curves.stepMiddle] and [Curves.stepEnd] in the predefined set.
+///  * [SawTooth], for a curve that resets to 0 after each step.
+class StepCurve extends Curve {
+  /// Creates a step curve with the given number of [steps].
+  ///
+  /// [steps] must be at least 1.
+  const StepCurve(this.steps) : assert(steps >= 1);
+
+  /// The number of discrete steps in the curve.
+  final int steps;
+
+  @override
+  double transformInternal(double t) {
+    // Snap t to the nearest step boundary above it, then normalise.
+    return (t * steps).ceilToDouble() / steps;
+  }
+
+  @override
+  String toString() =>
+      '${objectRuntimeType(this, 'StepCurve')}($steps)';
+}
+
+/// A curve that rises to a peak at t = 0.5 and then falls back to 0.0 at
+/// t = 1.0, tracing a smooth bell shape.
+///
+/// Unlike most curves, [BellCurve] does **not** end at 1.0; it returns to 0.0.
+/// Because of this it overrides [transform] directly and bypasses the standard
+/// 0→1 end-point contract. It is most useful for pulse effects — e.g. a widget
+/// that scales up and then back down over a single animation cycle.
+///
+/// The [sharpness] parameter (default 2.0) controls how steeply the bell rises
+/// and falls:
+///
+/// * Values close to 1.0 produce a very gentle, wide bell.
+/// * Higher values (e.g. 5.0) produce a taller, narrower peak.
+///
+/// Example usage:
+/// ```dart
+/// CurvedAnimation(
+///   parent: controller,
+///   curve: BellCurve(sharpness: 3.0),
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [ElasticInOutCurve], for an oscillating alternative.
+///  * [Curves.bell], a predefined instance with default sharpness.
+class BellCurve extends Curve {
+  /// Creates a bell-shaped curve.
+  ///
+  /// [sharpness] must be greater than 0.
+  const BellCurve({this.sharpness = 2.0}) : assert(sharpness > 0.0);
+
+  /// Controls how steeply the bell rises and falls around the midpoint.
+  ///
+  /// A value of 2.0 (the default) produces a gentle, natural-looking bell.
+  /// Higher values yield a sharper, more pronounced peak.
+  final double sharpness;
+
+  /// Overrides [transform] directly because [BellCurve] purposely returns 0.0
+  /// at both t = 0.0 and t = 1.0, violating the standard end-point contract of
+  /// [Curve]. Consumers that depend on the end-point invariant should not use
+  /// this curve for position animations; it is intended for scale/opacity pulses.
+  @override
+  double transform(double t) {
+    assert(t >= 0.0 && t <= 1.0,
+        'parametric value $t is outside of [0, 1] range.');
+    // Shift so the peak is at t = 0.5.
+    final double centered = t - 0.5;
+    return math.pow(
+          math.e,
+          -sharpness * 4.0 * centered * centered,
+        ).toDouble() -
+        math.pow(math.e, -sharpness).toDouble();
+  }
+
+  @override
+  double transformInternal(double t) => transform(t);
+
+  @override
+  String toString() =>
+      '${objectRuntimeType(this, 'BellCurve')}(sharpness: $sharpness)';
+}
+
+/// A curve that chains [first] and [second] together sequentially.
+///
+/// The unit interval is split at [split] (defaults to 0.5):
+///
+/// * From t = 0.0 to t = [split], [first] drives the animation over its full
+///   0.0 → 1.0 range, but the output is scaled to [0.0, split].
+/// * From t = [split] to t = 1.0, [second] drives the animation over its full
+///   0.0 → 1.0 range, but the output is scaled to [split, 1.0].
+///
+/// This is similar to [Split], but instead of blending the same progress value
+/// through two curves, [CombinedCurve] runs each curve from scratch in its own
+/// half of the timeline.
+///
+/// Example — ease into the midpoint with [Curves.easeIn], then ease out to the
+/// end with [Curves.easeOut]:
+/// ```dart
+/// const CombinedCurve(
+///   first: Curves.easeIn,
+///   second: Curves.easeOut,
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [Split], which blends the same t value through two curves.
+///  * [Interval], which restricts a curve to a sub-interval.
+class CombinedCurve extends Curve {
+  /// Creates a combined curve.
+  ///
+  /// [split] must be strictly between 0.0 and 1.0.
+  const CombinedCurve({
+    required this.first,
+    required this.second,
+    this.split = 0.5,
+  }) : assert(split > 0.0 && split < 1.0);
+
+  /// The curve applied during the first portion of the animation.
+  final Curve first;
+
+  /// The curve applied during the second portion of the animation.
+  final Curve second;
+
+  /// The progress value at which control transfers from [first] to [second].
+  ///
+  /// Defaults to 0.5 (the midpoint).
+  final double split;
+
+  @override
+  double transformInternal(double t) {
+    if (t < split) {
+      // Run `first` over [0, split], mapping its output to [0, split].
+      final double localT = t / split;
+      return first.transform(localT) * split;
+    } else {
+      // Run `second` over [split, 1], mapping its output to [split, 1].
+      final double localT = (t - split) / (1.0 - split);
+      return split + second.transform(localT) * (1.0 - split);
+    }
+  }
+
+  @override
+  String toString() =>
+      '${objectRuntimeType(this, 'CombinedCurve')}($first → $second @ $split)';
+}
+
+/// A curve that mirrors its input: the first half runs the inner [curve] from
+/// 0.0 to 1.0, and the second half runs it back from 1.0 to 0.0.
+///
+/// The net effect is that the animation plays forward and then rewinds within a
+/// single controller cycle, ending at 0.0 just like it started. This is handy
+/// for looping animations or attention-grabbing pulse effects where you want the
+/// widget to return to its original state automatically.
+///
+/// ```dart
+/// CurvedAnimation(
+///   parent: controller,
+///   curve: MirroredCurve(curve: Curves.easeInOut),
+/// )
+/// ```
+///
+/// See also:
+///
+///  * [FlippedCurve], which inverts a curve rather than mirroring it.
+///  * [BellCurve], for a smooth bell-shaped alternative.
+class MirroredCurve extends Curve {
+  /// Creates a mirrored curve wrapping the given [curve].
+  const MirroredCurve({required this.curve});
+
+  /// The curve to mirror.
+  final Curve curve;
+
+  /// Overrides [transform] directly because the output deliberately returns to
+  /// 0.0 at t = 1.0, which violates the standard [Curve] end-point contract.
+  @override
+  double transform(double t) {
+    assert(t >= 0.0 && t <= 1.0,
+        'parametric value $t is outside of [0, 1] range.');
+    if (t <= 0.5) {
+      return curve.transform(t * 2.0);
+    } else {
+      return curve.transform((1.0 - t) * 2.0);
+    }
+  }
+
+  @override
+  double transformInternal(double t) => transform(t);
+
+  @override
+  String toString() =>
+      '${objectRuntimeType(this, 'MirroredCurve')}($curve)';
+}
+
+// ============================================================
+// END OF CUSTOM ADDITIONS
+// ============================================================
 
 /// Abstract class that defines an API for evaluating 2D parametric curves.
 ///
@@ -1490,12 +1683,6 @@ abstract final class Curves {
   /// This curve is used by default to animate page transitions used by
   /// [CupertinoPageRoute].
   ///
-  /// It has been derived from plots of native iOS 16.3
-  /// animation frames on iPhone 14 Pro Max.
-  /// Specifically, transition animation positions were measured
-  /// every frame and plotted against time. Then, a cubic curve was
-  /// strictly fit to the measured data points.
-  ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_fast_ease_in_to_slow_ease_out.mp4}
   static const ThreePointCubic fastEaseInToSlowEaseOut = ThreePointCubic(
     Offset(0.056, 0.024),
@@ -1531,7 +1718,7 @@ abstract final class Curves {
   /// abrupt beginning and end. Nonetheless, the result is quite gentle and is
   /// hard to distinguish from [Curves.linear] at a glance.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_sine.mp4}
   static const Cubic easeInSine = Cubic(0.47, 0.0, 0.745, 0.715);
@@ -1542,7 +1729,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInSine], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_quad.mp4}
   static const Cubic easeInQuad = Cubic(0.55, 0.085, 0.68, 0.53);
@@ -1553,7 +1740,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInQuad], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_cubic.mp4}
   static const Cubic easeInCubic = Cubic(0.55, 0.055, 0.675, 0.19);
@@ -1566,7 +1753,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInCubic], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_quart.mp4}
   static const Cubic easeInQuart = Cubic(0.895, 0.03, 0.685, 0.22);
@@ -1576,7 +1763,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInQuart], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_quint.mp4}
   static const Cubic easeInQuint = Cubic(0.755, 0.05, 0.855, 0.06);
@@ -1589,7 +1776,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInQuint], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_expo.mp4}
   static const Cubic easeInExpo = Cubic(0.95, 0.05, 0.795, 0.035);
@@ -1600,7 +1787,7 @@ abstract final class Curves {
   /// Like [Curves.easeInExpo], this curve is fairly dramatic and will reduce
   /// the clarity of an animation if not given a longer duration.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_circ.mp4}
   static const Cubic easeInCirc = Cubic(0.6, 0.04, 0.98, 0.335);
@@ -1610,7 +1797,7 @@ abstract final class Curves {
   /// reaching its end. Instead of repeated swinging motions before ascending,
   /// though, this curve overshoots once, then continues to ascend.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_back.mp4}
   static const Cubic easeInBack = Cubic(0.6, -0.28, 0.735, 0.045);
@@ -1634,7 +1821,7 @@ abstract final class Curves {
   /// less abrupt beginning and end. Nonetheless, the result is quite gentle and
   /// is hard to distinguish from [Curves.linear] at a glance.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_sine.mp4}
   static const Cubic easeOutSine = Cubic(0.39, 0.575, 0.565, 1.0);
@@ -1645,7 +1832,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeOutSine], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_quad.mp4}
   static const Cubic easeOutQuad = Cubic(0.25, 0.46, 0.45, 0.94);
@@ -1658,7 +1845,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeOutQuad], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_cubic.mp4}
   static const Cubic easeOutCubic = Cubic(0.215, 0.61, 0.355, 1.0);
@@ -1671,7 +1858,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeOutCubic], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_quart.mp4}
   static const Cubic easeOutQuart = Cubic(0.165, 0.84, 0.44, 1.0);
@@ -1681,7 +1868,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeOutQuart], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_quint.mp4}
   static const Cubic easeOutQuint = Cubic(0.23, 1.0, 0.32, 1.0);
@@ -1691,7 +1878,7 @@ abstract final class Curves {
   /// animations extra flare, but a longer duration may need to be used to
   /// compensate for the steepness of the curve.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_expo.mp4}
   static const Cubic easeOutExpo = Cubic(0.19, 1.0, 0.22, 1.0);
@@ -1702,7 +1889,7 @@ abstract final class Curves {
   /// Like [Curves.easeOutExpo], this curve is fairly dramatic and will reduce
   /// the clarity of an animation if not given a longer duration.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_circ.mp4}
   static const Cubic easeOutCirc = Cubic(0.075, 0.82, 0.165, 1.0);
@@ -1712,7 +1899,7 @@ abstract final class Curves {
   /// reaching its end. Instead of repeated swinging motions after ascending,
   /// though, this curve only overshoots once.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_out_back.mp4}
   static const Cubic easeOutBack = Cubic(0.175, 0.885, 0.32, 1.275);
@@ -1729,7 +1916,7 @@ abstract final class Curves {
   /// slowly. This is similar to [Curves.easeInOut], but with sinusoidal easing
   /// for a slightly less abrupt beginning and end.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_sine.mp4}
   static const Cubic easeInOutSine = Cubic(0.445, 0.05, 0.55, 0.95);
@@ -1740,7 +1927,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInOutSine], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_quad.mp4}
   static const Cubic easeInOutQuad = Cubic(0.455, 0.03, 0.515, 0.955);
@@ -1754,7 +1941,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInOutQuad], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_cubic.mp4}
   static const Cubic easeInOutCubic = Cubic(0.645, 0.045, 0.355, 1.0);
@@ -1786,7 +1973,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInOutCubic], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_quart.mp4}
   static const Cubic easeInOutQuart = Cubic(0.77, 0.0, 0.175, 1.0);
@@ -1797,7 +1984,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInOutQuart], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_quint.mp4}
   static const Cubic easeInOutQuint = Cubic(0.86, 0.0, 0.07, 1.0);
@@ -1811,7 +1998,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInOutQuint], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_expo.mp4}
   static const Cubic easeInOutExpo = Cubic(1.0, 0.0, 0.0, 1.0);
@@ -1825,7 +2012,7 @@ abstract final class Curves {
   ///
   /// Compared to [Curves.easeInOutExpo], this curve is slightly steeper.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_circ.mp4}
   static const Cubic easeInOutCirc = Cubic(0.785, 0.135, 0.15, 0.86);
@@ -1839,7 +2026,7 @@ abstract final class Curves {
   /// by exceeding its lower bound, then exceeding its upper bound and finally
   /// descending to its final position.
   ///
-  /// Derived from Robert Penner’s easing functions.
+  /// Derived from Robert Penner's easing functions.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_ease_in_out_back.mp4}
   static const Cubic easeInOutBack = Cubic(0.68, -0.55, 0.265, 1.55);
@@ -1847,7 +2034,7 @@ abstract final class Curves {
   /// A curve that starts quickly and eases into its final position.
   ///
   /// Over the course of the animation, the object spends more time near its
-  /// final destination. As a result, the user isn’t left waiting for the
+  /// final destination. As a result, the user isn't left waiting for the
   /// animation to finish, and the negative effects of motion are minimized.
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_fast_out_slow_in.mp4}
@@ -1892,4 +2079,84 @@ abstract final class Curves {
   ///
   /// {@animation 464 192 https://flutter.github.io/assets-for-api-docs/assets/animation/curve_elastic_in_out.mp4}
   static const ElasticInOutCurve elasticInOut = ElasticInOutCurve();
+
+  // ============================================================
+  // CUSTOM PREDEFINED CURVE INSTANCES
+  // ============================================================
+
+  /// An animation curve that advances in 4 discrete equal-sized steps.
+  ///
+  /// Useful for frame-by-frame sprite animations or any effect that should
+  /// progress in hard increments rather than continuous motion.
+  ///
+  /// See [StepCurve] for the full configurable class.
+  static const StepCurve step4 = StepCurve(4);
+
+  /// An animation curve that advances in 8 discrete equal-sized steps.
+  ///
+  /// Useful for pixel-art style animations or coarser quantised motion.
+  ///
+  /// See [StepCurve] for the full configurable class.
+  static const StepCurve step8 = StepCurve(8);
+
+  /// A smooth bell-shaped curve that rises to a peak at the midpoint and
+  /// returns to 0.0 by t = 1.0.
+  ///
+  /// Well-suited for scale or opacity pulse effects where you want the widget
+  /// to return to its original appearance at the end of the animation.
+  ///
+  /// See [BellCurve] for the full configurable class.
+  static const BellCurve bell = BellCurve();
+
+  /// A sharper bell-shaped curve with a more pronounced peak.
+  ///
+  /// Uses a [BellCurve.sharpness] of 4.0 for a tighter, more dramatic pulse.
+  ///
+  /// See [BellCurve] for the full configurable class.
+  static const BellCurve bellSharp = BellCurve(sharpness: 4.0);
+
+  /// A combined curve that eases in during the first half of the animation
+  /// and eases out during the second half, using two separate curve phases.
+  ///
+  /// Unlike [easeInOut] (which is a single cubic), this variant runs
+  /// [Curves.easeIn] and [Curves.easeOut] as completely independent curves
+  /// chained at t = 0.5.
+  ///
+  /// See [CombinedCurve] for the full configurable class.
+  static const CombinedCurve easeInThenOut = CombinedCurve(
+    first: Curves.easeIn,
+    second: Curves.easeOut,
+  );
+
+  /// A combined curve that eases out during the first half and eases in during
+  /// the second half — the inverse of [easeInThenOut].
+  ///
+  /// Useful for animations that slow to a midpoint and then accelerate away,
+  /// such as swapping two widgets.
+  ///
+  /// See [CombinedCurve] for the full configurable class.
+  static const CombinedCurve easeOutThenIn = CombinedCurve(
+    first: Curves.easeOut,
+    second: Curves.easeIn,
+  );
+
+  /// A curve that plays [Curves.easeInOut] forward and then in reverse within
+  /// a single animation cycle, so the widget returns to its starting position.
+  ///
+  /// Handy for looping "breathe" or attention-grab animations where no separate
+  /// reverse animation is needed.
+  ///
+  /// See [MirroredCurve] for the full configurable class.
+  static const MirroredCurve mirroredEaseInOut =
+      MirroredCurve(curve: Curves.easeInOut);
+
+  /// A curve that plays [Curves.bounceOut] forward and then in reverse within
+  /// a single animation cycle.
+  ///
+  /// Produces a "bounce in, then settle back" effect without needing a
+  /// separate reverse animation controller.
+  ///
+  /// See [MirroredCurve] for the full configurable class.
+  static const MirroredCurve mirroredBounce =
+      MirroredCurve(curve: Curves.bounceOut);
 }
