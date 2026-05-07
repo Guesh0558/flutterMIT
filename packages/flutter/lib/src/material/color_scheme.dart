@@ -487,7 +487,7 @@ class ColorScheme with Diagnosticable {
   /// {@end-tool}
   const ColorScheme.light({
     this.brightness = Brightness.light,
-    this.primary = const Color(0xff6200ee),
+    this.primary = const Color(0xFFFF9800),
     this.onPrimary = Colors.white,
     Color? primaryContainer,
     Color? onPrimaryContainer,
@@ -621,7 +621,7 @@ class ColorScheme with Diagnosticable {
   /// {@end-tool}
   const ColorScheme.dark({
     this.brightness = Brightness.dark,
-    this.primary = const Color(0xffbb86fc),
+    this.primary = const Color(0xFFFFB74D),
     this.onPrimary = Colors.black,
     Color? primaryContainer,
     Color? onPrimaryContainer,
@@ -751,7 +751,7 @@ class ColorScheme with Diagnosticable {
   /// {@end-tool}
   const ColorScheme.highContrastLight({
     this.brightness = Brightness.light,
-    this.primary = const Color(0xff0000ba),
+    this.primary = const Color(0xFFE65100),
     this.onPrimary = Colors.white,
     Color? primaryContainer,
     Color? onPrimaryContainer,
