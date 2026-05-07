@@ -458,7 +458,7 @@ class ThemeData with Diagnosticable {
       applyElevationOverlayColor ??= brightness == Brightness.dark;
     }
     applyElevationOverlayColor ??= false;
-    primarySwatch ??= Colors.blue;
+    primarySwatch ??= Colors.orange;
     primaryColor ??= isDark ? Colors.grey[900]! : primarySwatch;
     final Brightness estimatedPrimaryColorBrightness = estimateBrightnessForColor(primaryColor);
     primaryColorLight ??= isDark ? Colors.grey[500]! : primarySwatch[100]!;
@@ -3379,14 +3379,14 @@ class VisualDensity with Diagnosticable {
 // dart format off
 const ColorScheme _colorSchemeLightM3 = ColorScheme(
   brightness: Brightness.light,
-  primary: Color(0xFF6750A4),
-  onPrimary: Color(0xFFFFFFFF),
-  primaryContainer: Color(0xFFEADDFF),
-  onPrimaryContainer: Color(0xFF4F378B),
-  primaryFixed: Color(0xFFEADDFF),
-  primaryFixedDim: Color(0xFFD0BCFF),
-  onPrimaryFixed: Color(0xFF21005D),
-  onPrimaryFixedVariant: Color(0xFF4F378B),
+  primary: Color(0xFFFF9800),
+  onPrimary: Color(0xFF4B2800),
+  primaryContainer: Color(0xFFFFE0B2),
+  onPrimaryContainer: Color(0xFF2B1700),
+  primaryFixed: Color(0xFFFFE0B2),
+  primaryFixedDim: Color(0xFFFFB74D),
+  onPrimaryFixed: Color(0xFF2B1700),
+  onPrimaryFixedVariant: Color(0xFF633D00),
   secondary: Color(0xFF625B71),
   onSecondary: Color(0xFFFFFFFF),
   secondaryContainer: Color(0xFFE8DEF8),
@@ -3426,21 +3426,21 @@ const ColorScheme _colorSchemeLightM3 = ColorScheme(
   scrim: Color(0xFF000000),
   inverseSurface: Color(0xFF322F35),
   onInverseSurface: Color(0xFFF5EFF7),
-  inversePrimary: Color(0xFFD0BCFF),
+  inversePrimary: Color(0xFFFF9800),
   // The surfaceTint color is set to the same color as the primary.
-  surfaceTint: Color(0xFF6750A4),
+  surfaceTint: Color(0xFFFF9800),
 );
 
 const ColorScheme _colorSchemeDarkM3 = ColorScheme(
   brightness: Brightness.dark,
-  primary: Color(0xFFD0BCFF),
-  onPrimary: Color(0xFF381E72),
-  primaryContainer: Color(0xFF4F378B),
-  onPrimaryContainer: Color(0xFFEADDFF),
-  primaryFixed: Color(0xFFEADDFF),
-  primaryFixedDim: Color(0xFFD0BCFF),
-  onPrimaryFixed: Color(0xFF21005D),
-  onPrimaryFixedVariant: Color(0xFF4F378B),
+  primary: Color(0xFFFFB74D), // Muted Orange
+  onPrimary: Color(0xFF4B2800), // Dark Brown/Black for text on orange
+  primaryContainer: Color(0xFFFB8C00), // Deep Orange
+  onPrimaryContainer: Color(0xFFFFE0B2), // Light text on deep orange
+  primaryFixed: Color(0xFFFFE0B2),
+  primaryFixedDim: Color(0xFFFFB74D),
+  onPrimaryFixed: Color(0xFF2B1700),
+  onPrimaryFixedVariant: Color(0xFF633D00),
   secondary: Color(0xFFCCC2DC),
   onSecondary: Color(0xFF332D41),
   secondaryContainer: Color(0xFF4A4458),
@@ -3480,9 +3480,9 @@ const ColorScheme _colorSchemeDarkM3 = ColorScheme(
   scrim: Color(0xFF000000),
   inverseSurface: Color(0xFFE6E0E9),
   onInverseSurface: Color(0xFF322F35),
-  inversePrimary: Color(0xFF6750A4),
+ inversePrimary: Color(0xFFFF9800), // Standard Orange
   // The surfaceTint color is set to the same color as the primary.
-  surfaceTint: Color(0xFFD0BCFF),
+  surfaceTint: Color(0xFFFFB74D),
 );
 // dart format on
 
